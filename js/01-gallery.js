@@ -1,7 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-console.log(galleryItems);
+// console.log(galleryItems);
 const wrapGallaryEl = document.querySelector(".gallery");
 
 const allGallaryItems = galleryItems.map((el) => {
@@ -21,20 +21,27 @@ const allGallaryItems = galleryItems.map((el) => {
   return gallerylist;
 });
 wrapGallaryEl.append(...allGallaryItems);
-
+console.log(wrapGallaryEl);
 function toOpenModalImage(event) {
-        const gallaryImg = event.target;
     event.preventDefault();
+    const gallaryImg = event.target;
+  
     if (!gallaryImg.classList.contains("gallery__image")) {
       return;
     }
-  gallaryImg.onclick = () => {
-
-    basicLightbox.create(`<img src="${gallaryImg.dataset.source}">`).show();
-  };
-  // basicLightbox.create(`${gallaryImg}`).show();
-//   console.log(gallaryImg.description);
-//   console.log(event.target);
+  const showLightBox = basicLightbox.create(`<img src="${gallaryImg.dataset.source}">`,
+    {
+      onShow: (showLightBox) => window.addEventListener("keydown", closeEscape),
+      onClose: (showLightBox) => window.removeEventListener("keydown", closeEscape),
+    });
+  showLightBox.show();
+  function closeEscape(event) {
+    if (event.code !== 'Escape') {
+    return;
+  }
+  showLightBox.close();
+  }
 }
 wrapGallaryEl.addEventListener("click", toOpenModalImage);
 
+  
